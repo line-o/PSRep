@@ -13,14 +13,15 @@ function build (str, rep) {
 	var i, el;
 	if (str.length === 0)
 		return rep;
-	//console.log(typeof rep);
+	res = [];
 	for (i = abbrevs.length; i -= 1;) {
 		el = abbrevs[i];
 		if (matchesRep(str, el)) {
-			console.log(rep.concat([el]));
-			return build( str.slice(el.length), rep.concat([el]));
+		console.log(el);
+			res.push(build(str.slice(el.length), rep.concat([el])));
 		}
 	}
+	return res;
 };
 ChemElemRep.getRep = function (str) {
 	var idx = 0, 
@@ -34,6 +35,6 @@ ChemElemRep.getRep = function (str) {
 	}
 	else
 		console.log(str);
-	return build(str, []);
+	return build(str, [], []);
 };
 module.exports = ChemElemRep;
