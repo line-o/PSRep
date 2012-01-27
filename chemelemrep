@@ -1,176 +1,29 @@
 //all element abbreviations
 var abbrevs = [
-		'H',
-		'He',
-		'K',
-		'Li',
-		'Be',
-		'B',
-		'C',
-		'N',
-		'O',
-		'F',
-		'Ne',
-		'L',
-		'Na',
-		'Mg',
-		'Al',
-		'Si',
-		'P',
-		'S',
-		'Cl',
-		'Ar',
-		'M',
-		'K',
-		'Ca',
-		'Sc',
-		'Ti',
-		'V',
-		'Cr',
-		'Mn',
-		'Fe',
-		'Co',
-		'Ni',
-		'Cu',
-		'Zn',
-		'Ga',
-		'Ge',
-		'As',
-		'Se',
-		'Br',
-		'Kr',
-		'N',
-		'Rb',
-		'Sr',
-		'Y',
-		'Zr',
-		'Nb',
-		'Mo',
-		'Tc',
-		'Ru',
-		'Rh',
-		'Pd',
-		'Ag',
-		'Cd',
-		'In',
-		'Sn',
-		'Sb',
-		'Te',
-		'I',
-		'Xe',
-		'O',
-		'Cs',
-		'Ba',
-		'Hf',
-		'Ta',
-		'W',
-		'Re',
-		'Os',
-		'Ir',
-		'Pt',
-		'Au',
-		'Hg',
-		'Tl',
-		'Pb',
-		'Bi',
-		'Po',
-		'At',
-		'Rn',
-		'P',
-		'Fr',
-		'Ra',
-		'Rf',
-		'Db',
-		'Sg',
-		'Bh',
-		'Hs',
-		'Mt',
-		'Ds',
-		'Rg',
-		'Cn',
-		'Uut',
-		'Uuq',
-		'Uup',
-		'Uuh',
-		'Uus',
-		'Uuo',
-		'Q',
-		'La',
-		'Ce',
-		'Pr',
-		'Nd',
-		'Pm',
-		'Sm',
-		'Eu',
-		'Gd',
-		'Tb',
-		'Dy',
-		'Ho',
-		'Er',
-		'Tm',
-		'Yb',
-		'Lu',
-		'Ac',
-		'Th',
-		'Pa',
-		'U',
-		'Np',
-		'Pu',
-		'Am',
-		'Cm',
-		'Bk',
-		'Cf',
-		'Es',
-		'Fm',
-		'Md',
-		'No',
-		'Lr'
+'H','He','K','Li','Be','B','C','N','O','F','Ne','L','Na','Mg','Al','Si','P','S','Cl','Ar','M','K','Ca','Sc','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se','Br','Kr','N','Rb','Sr','Y','Zr','Nb','Mo','Tc','Ru','Rh','Pd','Ag','Cd','In','Sn','Sb','Te','I','Xe','O','Cs','Ba','Hf','Ta','W','Re','Os','Ir','Pt','Au','Hg','Tl','Pb','Bi','Po','At','Rn','P','Fr','Ra','Rf','Db','Sg','Bh','Hs','Mt','Ds','Rg','Cn','Uut','Uuq','Uup','Uuh','Uus','Uuo','Q','La','Ce','Pr','Nd','Pm','Sm','Eu','Gd','Tb','Dy','Ho','Er','Tm','Yb','Lu','Ac','Th','Pa','U','Np','Pu','Am','Cm','Bk','Cf','Es','Fm','Md','No','Lr'
 ];
-function hasRep (str) {
-	return (abbrevs.indexOf(str) >= 0);
+function matchesRep (str, el) {
+	//console.log(str, el, str.indexOf(el));
+	return (str.indexOf(el.toLowerCase()) === 0);
 }
 
 var ChemElemRep = {};
-/**
- * 
- */
-function build (str, test, idx, rep) {
-	var last = rep[rep.length-1],
-		test = str[idx].toUpperCase();
-	console.log('called with:', str, idx, rep);
-	console.log('test: "', test, '"');
-	console.log('last: "', last, '"');
-	if (hasRep(test)) {
-		rep.push(abbrevs.indexOf(test));
-		if (idx+1 < str.length) {
-			build(str, idx+1, rep);
+
+function build (str, rep) {
+	var i, el;
+	if (str.length === 0)
+		return rep;
+	//console.log(typeof rep);
+	for (i = abbrevs.length; i -= 1;) {
+		el = abbrevs[i];
+		if (matchesRep(str, el)) {
+			console.log(rep.concat([el]));
+			return build( str.slice(el.length), rep.concat([el]));
 		}
 	}
-	else if (idx+1 < str.length) {
-		//test mit nächstem
-		test += str[idx+1];
-		console.log('test2: "', test, '"');
-		if (hasRep(test)) {
-			console.log(test);
-			rep.push(abbrevs.indexOf(test));
-			if (idx+2 < str.length) {
-				build(str, idx+2, rep);
-			}
-		}
-	}
-	else if (abbrevs[last].length === 1) {
-		console.log('zurück!', idx, abbrevs[last].length, rep);
-		rep.pop();
-		build(str, idx - abbrevs[last].length, rep);
-	}
-	else {
-		console.log('nicht möglich');
-	}
-	return rep;
 };
 ChemElemRep.getRep = function (str) {
 	var idx = 0, 
-		test = '', 
 		idxs = [],
 		representation = [],
 		cs = str.split(''),
@@ -180,10 +33,7 @@ ChemElemRep.getRep = function (str) {
 		return false;
 	}
 	else
-		console.log(cs);
-	idxs = build(cs, cs[0], 0, []);
-	while(idx = idxs.shift())
-		representation.push(abbrevs[idx]);
-	return representation;
+		console.log(str);
+	return build(str, []);
 };
 module.exports = ChemElemRep;
