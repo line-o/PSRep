@@ -10,7 +10,7 @@ function matchesRep (str, el) {
 var ChemElemRep = {};
 
 function build (str, rep) {
-	var i, el;
+	var i, el, res;
 	if (str.length === 0)
 		return rep;
 	res = [];
@@ -24,14 +24,11 @@ function build (str, rep) {
 	return res;
 };
 ChemElemRep.getRep = function (str) {
-	var idx = 0, 
-		idxs = [],
-		representation = [],
-		cs = str.split(''),
+	var cs  = str.split(''),
 		cnt = cs.length;
 	if (cnt === 0) {
 		console.log('empty string');
-		return false;
+		return [];
 	}
 	else
 		console.log(str);
